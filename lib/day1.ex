@@ -11,33 +11,17 @@ defmodule Aoc.Day1 do
 
   @impl Day
   def a(numbers) do
-    numbers
-    |> unzip_zip()
-    |> Enum.map(fn {a, b} -> abs(a - b) end)
-    |> Enum.sum()
+    numbers |> Enum.zip() |> Enum.map(fn {a, b} -> abs(a - b) end) |> Enum.sum()
   end
 
   @impl Day
-  def b(nums) do
-    [l, r] =
-      nums
-      |> Enum.unzip()
-      |> Tuple.to_list()
-
-    acc =
-      l
-      |> Enum.map(&{&1, 0})
-      |> Enum.into(%{})
+  def b([l, r]) do
+    acc = l |> Enum.map(&{&1, 0}) |> Enum.into(%{})
 
     occurrences =
-      r
-      |> Enum.reduce(acc, fn num, acc ->
-        Map.update(acc, num, 1, fn x -> x + num end)
-      end)
+      Enum.reduce(r, acc, &Map.update(&2, &1, 1, fn x -> x + &1 end))
 
-    l
-    |> Enum.map(&Map.get(occurrences, &1))
-    |> Enum.sum()
+    Enum.reduce(l, 0, &(&2 + Map.get(occurrences, &1, 0)))
   end
 
   @impl Day
@@ -46,22 +30,17 @@ defmodule Aoc.Day1 do
       file
       |> String.trim()
       |> String.split("\n")
-      |> Enum.map(&parse_nums/1)
+      |> Enum.map(&parse_numbers/1)
+      |> Enum.unzip()
+      |> Tuple.to_list()
+      |> Enum.map(&Enum.sort/1)
     end
   end
 
-  defp parse_nums(line) do
+  defp parse_numbers(line) do
     line
     |> String.split(~r/\s+/, trim: true)
     |> Enum.map(&String.to_integer/1)
     |> List.to_tuple()
-  end
-
-  defp unzip_zip(numbers) do
-    numbers
-    |> Enum.unzip()
-    |> Tuple.to_list()
-    |> Enum.map(&Enum.sort/1)
-    |> Enum.zip()
   end
 end
