@@ -1,5 +1,6 @@
 # The directory Mix will write compiled artifacts to.
 /_build/
+/build/
 
 # If you run "mix test --cover", coverage assets end up here.
 /cover/
@@ -27,3 +28,4 @@ aoc_2020-*.tar
 
 .tool-versions
 .mise.toml
+
