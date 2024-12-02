@@ -39,9 +39,28 @@ defmodule Aoc.Day do
       "The solution to 1a is: 12345"
       "The solution to 1b is: 12345"
   """
-  def solve(module) do
-    data = module.parse_input()
-    IO.puts("The solution to #{module.day()}a is: #{module.a(data)}")
-    IO.puts("The solution to #{module.day()}b is: #{module.b(data)}")
+  def solve(module) when is_atom(module) do
+    :code.ensure_loaded(module)
+    if function_exported?(module, :parse_input, 0) do
+      data = module.parse_input()
+      IO.puts("The solution to #{module.day()}a is: #{module.a(data)}")
+      IO.puts("The solution to #{module.day()}b is: #{module.b(data)}")
+    else
+      IO.puts("Invalid module")
+    end
+  end
+
+  def solve(day) when is_integer(day) do
+    module = :"Elixir.Aoc.Day#{day}"
+    solve(module)
+  end
+
+  def solve(_), do: IO.puts("Invalid day or module")
+
+  def solve() do
+    for day <- 1..25 do
+      solve(day)
+    end
+    :ok
   end
 end

@@ -56,7 +56,7 @@ defmodule Aoc.Day2 do
     end
   end
 
-  @spec check_ramp(value :: {[integer, integer], integer}, ramp :: atom) :: {atom, atom | integer}
+  @spec check_ramp(value :: {[integer], integer}, ramp :: atom) :: {atom, atom | integer}
   defp check_ramp({[a, b], _}, ramp) when b - a > 0 and b - a < 4 and ramp in [:incr, nil],
     do: {:cont, :incr}
 
