@@ -51,8 +51,58 @@ defmodule Aoc.Utilities do
     ]
   end
 
+  def get_adjacent({x, y}, :diagonal_only) do
+    [
+      {x - 1, y - 1},
+      {x + 1, y - 1},
+      {x - 1, y + 1},
+      {x + 1, y + 1}
+    ]
+  end
+
   def get_adjacent({x, y}, _) do
     [{x, y - 1}, {x - 1, y}, {x + 1, y}, {x, y + 1}]
+  end
+
+  def get_adjacent_directions(:diagonal) do
+    [
+      {0, -1},
+      {-1, 0},
+      {1, 0},
+      {0, 1},
+      {-1, -1},
+      {1, -1},
+      {-1, 1},
+      {1, 1}
+    ]
+  end
+
+  def distance({ax, ay}, {bx, by}) do
+    {bx - ax, by - ay}
+  end
+
+  def move_coords({x, y}, {dx, dy}) do
+    {x + dx, y + dy}
+  end
+
+  def map_from_grid(string) do
+    string
+    |> String.split("\n", trim: true)
+    |> Enum.map(&(String.split(&1, "", trim: true) |> Enum.with_index()))
+    |> Enum.with_index()
+    |> Enum.flat_map(fn {row, y} ->
+      row
+      |> Enum.map(fn {cell, x} ->
+        {{x, y}, cell}
+      end)
+    end)
+    |> Enum.into(%{})
+  end
+
+  def travel({_, _} = init, {dx, dy}, distance) do
+    1..distance
+    |> Enum.map(&{dx * &1, dy * &1})
+    |> Enum.map(&move_coords(init, &1))
   end
 
   @doc """
