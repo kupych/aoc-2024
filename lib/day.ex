@@ -41,6 +41,7 @@ defmodule Aoc.Day do
   """
   def solve(module) when is_atom(module) do
     :code.ensure_loaded(module)
+
     if function_exported?(module, :parse_input, 0) do
       data = module.parse_input()
       IO.puts("The solution to #{module.day()}a is: #{module.a(data)}")
@@ -61,6 +62,7 @@ defmodule Aoc.Day do
     for day <- 1..25 do
       solve(day)
     end
+
     :ok
   end
 end
