@@ -11,12 +11,12 @@ defmodule Aoc.Day17 do
 
   @impl Day
   def a(_) do
-    ""
+    :not_solved
   end
 
   @impl Day
   def b(_) do
-    ""
+    :not_solved
   end
 
   @impl Day
