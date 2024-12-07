@@ -30,10 +30,8 @@ defmodule Aoc.Day4 do
   end
 
   @impl Day
-  def parse_input() do
-    with {:ok, file} <- Day.load(__MODULE__) do
-      Utilities.map_from_grid(file)
-    end
+  def parse_input(file) do
+    Utilities.map_from_grid(file)
   end
 
   defp find_x_mas(a, %{grid: grid, x_mases: x_mases} = acc) do

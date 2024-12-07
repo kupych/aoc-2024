@@ -27,10 +27,8 @@ defmodule Aoc.Day3 do
   end
 
   @impl Day
-  def parse_input() do
-    with {:ok, file} <- Day.load(__MODULE__) do
-      file
-    end
+  def parse_input(file) do
+    file
   end
 
   @spec do_mul([binary]) :: integer

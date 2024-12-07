@@ -20,7 +20,7 @@ defmodule Aoc.Day do
   @doc """
   Parses the file input for the problem.
   """
-  @callback parse_input() :: term
+  @callback parse_input(binary) :: term
 
   @doc """
   Loads the file input for the problem if available.
@@ -42,12 +42,14 @@ defmodule Aoc.Day do
   def solve(module) when is_atom(module) do
     :code.ensure_loaded(module)
 
-    if function_exported?(module, :parse_input, 0) do
-      data = module.parse_input()
+    with true <- function_exported?(module, :parse_input, 1),
+         {:ok, file} <- load(module) do
+      data = module.parse_input(file)
       IO.puts("The solution to #{module.day()}a is: #{module.a(data)}")
       IO.puts("The solution to #{module.day()}b is: #{module.b(data)}")
     else
-      IO.puts("Invalid module")
+      false -> IO.puts("Invalid module")
+      _ -> IO.puts("File not found")
     end
   end
 

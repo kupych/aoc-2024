@@ -20,12 +20,10 @@ defmodule Aoc.Day2 do
   end
 
   @impl Day
-  def parse_input() do
-    with {:ok, file} <- Day.load(__MODULE__) do
-      file
-      |> String.split("\n", trim: true)
-      |> Enum.map(&parse_nums/1)
-    end
+  def parse_input(file) do
+    file
+    |> String.split("\n", trim: true)
+    |> Enum.map(&parse_nums/1)
   end
 
   @spec parse_nums(nums :: binary) :: [integer]

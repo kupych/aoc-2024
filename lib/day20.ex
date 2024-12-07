@@ -21,8 +21,6 @@ defmodule Aoc.Day20 do
 
   @impl Day
   def parse_input() do
-    with {:ok, file} <- Day.load(__MODULE__) do
-      file
-    end
+    file
   end
 end

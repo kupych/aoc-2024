@@ -25,16 +25,14 @@ defmodule Aoc.Day1 do
   end
 
   @impl Day
-  def parse_input() do
-    with {:ok, file} <- Day.load(__MODULE__) do
-      file
-      |> String.trim()
-      |> String.split("\n")
-      |> Enum.map(&parse_numbers/1)
-      |> Enum.unzip()
-      |> Tuple.to_list()
-      |> Enum.map(&Enum.sort/1)
-    end
+  def parse_input(file) do
+    file
+    |> String.trim()
+    |> String.split("\n")
+    |> Enum.map(&parse_numbers/1)
+    |> Enum.unzip()
+    |> Tuple.to_list()
+    |> Enum.map(&Enum.sort/1)
   end
 
   defp parse_numbers(line) do

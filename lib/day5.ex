@@ -27,13 +27,7 @@ defmodule Aoc.Day5 do
   end
 
   @impl Day
-  def parse_input() do
-    with {:ok, file} <- Day.load(__MODULE__) do
-      do_parse(file)
-    end
-  end
-
-  def do_parse(file) do
+  def parse_input(file) do
     [rules, updates] =
       file
       |> String.split("\n\n", trim: true)

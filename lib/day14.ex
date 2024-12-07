@@ -21,9 +21,7 @@ defmodule Aoc.Day14 do
 
   @impl Day
   def parse_input() do
-    with {:ok, file} <- Day.load(__MODULE__) do
-      file
-      |> String.split("\n", trim: true)
-    end
+    file
+    |> String.split("\n", trim: true)
   end
 end
