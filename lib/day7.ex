@@ -80,16 +80,31 @@ defmodule Aoc.Day7 do
   # Concatenation operator (||) : e.g. 12 || 345 = 12345
   defp evaluate(%{operators: ["2" | ops], operands: [b | operands], result: a}, value) do
     digits = b |> :math.log10() |> trunc() |> Kernel.+(1)
-    evaluate(%{operators: ops, operands: operands, result: a * 10 ** digits + b}, value)
+    result = a * 10 ** digits + b
+    if result > value do
+      {:cont, false}
+    else
+      evaluate(%{operators: ops, operands: operands, result: result}, value)
+    end
   end
 
   # Multiplication
   defp evaluate(%{operators: ["1" | ops], operands: [b | operands], result: a}, value) do
-    evaluate(%{operators: ops, operands: operands, result: a * b}, value)
+    result = a * b
+    if result > value do
+      {:cont, false}
+    else
+      evaluate(%{operators: ops, operands: operands, result: result}, value)
+    end
   end
 
   # Addition
   defp evaluate(%{operators: ["0" | ops], operands: [b | operands], result: a}, value) do
-    evaluate(%{operators: ops, operands: operands, result: a + b}, value)
+    result = a + b
+    if result > value do
+      {:cont, false}
+    else
+      evaluate(%{operators: ops, operands: operands, result: result}, value)
+    end
   end
 end

@@ -20,7 +20,7 @@ defmodule Aoc.Day13 do
   end
 
   @impl Day
-  def parse_input() do
+  def parse_input(file) do
     file
     |> String.split("\n", trim: true)
   end
