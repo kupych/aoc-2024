@@ -81,6 +81,7 @@ defmodule Aoc.Day7 do
   defp evaluate(%{operators: ["2" | ops], operands: [b | operands], result: a}, value) do
     digits = b |> :math.log10() |> trunc() |> Kernel.+(1)
     result = a * 10 ** digits + b
+
     if result > value do
       {:cont, false}
     else
@@ -91,6 +92,7 @@ defmodule Aoc.Day7 do
   # Multiplication
   defp evaluate(%{operators: ["1" | ops], operands: [b | operands], result: a}, value) do
     result = a * b
+
     if result > value do
       {:cont, false}
     else
@@ -101,6 +103,7 @@ defmodule Aoc.Day7 do
   # Addition
   defp evaluate(%{operators: ["0" | ops], operands: [b | operands], result: a}, value) do
     result = a + b
+
     if result > value do
       {:cont, false}
     else

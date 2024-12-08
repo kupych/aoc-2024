@@ -81,6 +81,10 @@ defmodule Aoc.Utilities do
     {bx - ax, by - ay}
   end
 
+  def manhattan_distance({ax, ay}, {bx, by}) do
+    abs(bx - ax) + abs(by - ay)
+  end
+
   def move_coords({x, y}, {dx, dy}) do
     {x + dx, y + dy}
   end
@@ -103,6 +107,12 @@ defmodule Aoc.Utilities do
     1..distance
     |> Enum.map(&{dx * &1, dy * &1})
     |> Enum.map(&move_coords(init, &1))
+  end
+
+  def manhattan_circle({x, y}, r) do
+    for dx <- -r..r, dy <- -r..r, abs(dx) + abs(dy) <= r do
+      {x + dx, y + dy}
+    end
   end
 
   @doc """
