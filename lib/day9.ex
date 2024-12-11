@@ -114,7 +114,7 @@ defmodule Aoc.Day9 do
     |> Enum.sort_by(&elem(&1, 0), :desc)
   end
 
-  defp leftmost_free(%{space_blocks: sb} = structure, length, index) do
+  defp leftmost_free(%{space_blocks: sb}, length, index) do
     sb
     |> Enum.sort_by(&elem(&1, 0))
     |> Enum.find(fn {k, v} -> v >= length and k < index end)
@@ -122,10 +122,10 @@ defmodule Aoc.Day9 do
 
   def print_structure(structure) do
     structure
-    |> Enum.filter(fn {k, v} -> is_integer(k) end)
+    |> Enum.filter(fn {k, _} -> is_integer(k) end)
     |> Enum.sort_by(&elem(&1, 0))
     |> Enum.map(fn
-      {k, nil} -> "."
+      {_, nil} -> "."
       {_, v} -> "#{v}"
     end)
     |> Enum.join()

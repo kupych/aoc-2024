@@ -89,7 +89,7 @@ defmodule Aoc.Utilities do
     {x + dx, y + dy}
   end
 
-  def map_from_grid(string) do
+  def map_from_grid(string, func \\ false) do
     string
     |> String.split("\n", trim: true)
     |> Enum.map(&(String.split(&1, "", trim: true) |> Enum.with_index()))
@@ -97,7 +97,12 @@ defmodule Aoc.Utilities do
     |> Enum.flat_map(fn {row, y} ->
       row
       |> Enum.map(fn {cell, x} ->
-        {{x, y}, cell}
+        {{x, y},
+         if func do
+           apply(func, [cell])
+         else
+           cell
+         end}
       end)
     end)
     |> Enum.into(%{})
