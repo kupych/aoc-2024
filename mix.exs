@@ -21,8 +21,8 @@ defmodule Aoc.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:nebulex, "~> 2.6.1"},
-      {:decorator, "~> 1.4"}
+      {:decorator, "~> 1.4"},
+      {:nebulex, "~> 2.6.1"}
     ]
   end
 end

@@ -15,7 +15,6 @@ defmodule Aoc.Day8 do
       grid
       |> Enum.group_by(&elem(&1, 1), &elem(&1, 0))
       |> Enum.reject(fn {k, _} -> k == "." end)
-      |> IO.inspect()
 
     grid
     |> Enum.map(fn
@@ -25,7 +24,6 @@ defmodule Aoc.Day8 do
     |> Enum.into(%{})
     |> Map.put(:max, nil)
     |> then(&Enum.reduce(nodes, &1, fn n, acc -> find_antinodes(n, acc) end))
-    |> IO.inspect()
     |> Enum.count(fn {_, v} -> is_map(v) and !Enum.empty?(v.antinodes) end)
   end
 
@@ -35,7 +33,6 @@ defmodule Aoc.Day8 do
       grid
       |> Enum.group_by(&elem(&1, 1), &elem(&1, 0))
       |> Enum.reject(fn {k, _} -> k == "." end)
-      |> IO.inspect()
 
     max =
       grid
@@ -51,7 +48,6 @@ defmodule Aoc.Day8 do
     |> Enum.into(%{})
     |> Map.put(:max, max)
     |> then(&Enum.reduce(nodes, &1, fn n, acc -> find_antinodes(n, acc) end))
-    |> IO.inspect()
     |> Enum.count(fn {_, v} -> is_map(v) and !Enum.empty?(v.antinodes) end)
   end
 
