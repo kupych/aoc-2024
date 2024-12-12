@@ -38,6 +38,9 @@ defmodule Aoc.Utilities do
   """
   def get_adjacent(coords, diagonal \\ false)
 
+  def get_adjacent({x, y}, :vertical), do: [{x, y - 1}, {x, y + 1}]
+  def get_adjacent({x, y}, :horizontal), do: [{x - 1, y}, {x + 1, y}]
+
   def get_adjacent({x, y}, :diagonal) do
     [
       {x - 1, y - 1},
@@ -80,6 +83,18 @@ defmodule Aoc.Utilities do
   def distance({ax, ay}, {bx, by}) do
     {bx - ax, by - ay}
   end
+
+  def bounds(%{} = grid) do
+    {xs, ys} =
+      grid
+      |> Map.keys()
+      |> Enum.unzip()
+
+    {Enum.max(xs), Enum.max(ys)}
+  end
+
+  def in_bounds?({x, y}, _) when x < 0 or y < 0, do: false
+  def in_bounds?({x, y}, {max_x, max_y}), do: x <= max_x and y <= max_y
 
   def manhattan_distance({ax, ay}, {bx, by}) do
     abs(bx - ax) + abs(by - ay)

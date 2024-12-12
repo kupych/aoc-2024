@@ -13,12 +13,16 @@ defmodule Aoc.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger]
+      extra_applications: [:logger],
+      mod: {Aoc.Application, []}
     ]
   end
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
-    []
+    [
+      {:nebulex, "~> 2.6.1"},
+      {:decorator, "~> 1.4"}
+    ]
   end
 end

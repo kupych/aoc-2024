@@ -29,7 +29,7 @@ defmodule Aoc.Day do
       iex> load(Aoc.Day1)
       {:ok, "......."}
   """
-  def load(module), do: File.read("files/#{module.day}")
+  def load(module), do: File.read("files/#{module.day()}")
 
   @doc """
   Returns the solution for parts A and B of the problem.

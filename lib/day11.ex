@@ -4,34 +4,28 @@ defmodule Aoc.Day11 do
   """
   @behaviour Aoc.Day
 
-  alias Aoc.Day
+  use Nebulex.Caching
+
+  alias Aoc.{Day, LocalCache}
 
   @impl Day
   def day(), do: 11
 
   @impl Day
   def a(stones) do
-    :ets.new(:stones, [:named_table, {:write_concurrency, true}, {:read_concurrency, true}])
-
     sum =
       stones
       |> Enum.map(&blink(&1, 0, 25))
       |> Enum.sum()
 
-    :ets.delete(:stones)
     sum
   end
 
   @impl Day
   def b(stones) do
-    :ets.new(:stones, [:named_table, {:write_concurrency, true}, {:read_concurrency, true}])
-
-    sum =
-      stones
-      |> Enum.map(&blink(&1, 0, 75))
-      |> Enum.sum()
-    :ets.delete(:stones)
-    sum
+    stones
+    |> Enum.map(&blink(&1, 0, 75))
+    |> Enum.sum()
   end
 
   @impl Day
@@ -41,35 +35,29 @@ defmodule Aoc.Day11 do
     |> Enum.map(&String.to_integer/1)
   end
 
+  @decorate cacheable(
+              cache: LocalCache,
+              key: {__MODULE__, :stone, stone, level, target}
+            )
   def blink(stone, level, target) do
-    case :ets.lookup(:stones, {stone, level}) do
-      [{_, result}] ->
-        result
+    cond do
+      level == target ->
+        1
 
-      [] ->
-        result =
-          cond do
-            level == target ->
-              1
+      stone == 0 ->
+        blink(1, level + 1, target)
 
-            stone == 0 ->
-              blink(1, level + 1, target)
+      even_digits?(stone) ->
+        stone_string = Integer.to_string(stone)
+        digits = String.length(stone_string)
 
-            even_digits?(stone) ->
-              stone_string = Integer.to_string(stone)
-              digits = String.length(stone_string)
+        {a, b} = String.split_at("#{stone}", div(digits, 2))
 
-              {a, b} = String.split_at("#{stone}", div(digits, 2))
+        blink(String.to_integer(a), level + 1, target) +
+          blink(String.to_integer(b), level + 1, target)
 
-              blink(String.to_integer(a), level + 1, target) +
-                blink(String.to_integer(b), level + 1, target)
-
-            true ->
-              blink(stone * 2024, level + 1, target)
-          end
-
-        :ets.insert_new(:stones, {{stone, level}, result})
-        result
+      true ->
+        blink(stone * 2024, level + 1, target)
     end
   end
 
