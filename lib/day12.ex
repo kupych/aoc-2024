@@ -4,7 +4,8 @@ defmodule Aoc.Day12 do
   """
   @behaviour Aoc.Day
 
-  alias Aoc.{Day, Utilities}
+  alias Aoc.Day
+  alias Aoc.Utilities.Grid
 
   @impl Day
   def day(), do: 12
@@ -30,7 +31,7 @@ defmodule Aoc.Day12 do
 
   @impl Day
   def parse_input(file) do
-    Utilities.map_from_grid(file)
+    Grid.map_from_grid(file)
   end
 
   def get_perimeter(values) do
@@ -45,7 +46,7 @@ defmodule Aoc.Day12 do
     value_map = MapSet.new(values)
 
     values
-    |> Enum.flat_map(&Utilities.get_adjacent(&1))
+    |> Enum.flat_map(&Grid.get_adjacent(&1))
     |> Enum.uniq()
     |> Enum.reject(&MapSet.member?(value_map, &1))
     |> Enum.flat_map(&get_boundaries(&1, value_map))
@@ -56,7 +57,7 @@ defmodule Aoc.Day12 do
 
   def calculate_fence(value, values_map) do
     value
-    |> Utilities.get_adjacent()
+    |> Grid.get_adjacent()
     |> Enum.reject(&MapSet.member?(values_map, &1))
     |> Enum.count()
   end
@@ -80,7 +81,7 @@ defmodule Aoc.Day12 do
   defp find_cluster([current | rest], remaining, cluster) do
     adjacent =
       current
-      |> Utilities.get_adjacent()
+      |> Grid.get_adjacent()
       |> Enum.filter(&Enum.member?(remaining, &1))
 
     find_cluster(rest ++ adjacent, remaining -- adjacent, [current | cluster])
@@ -89,13 +90,13 @@ defmodule Aoc.Day12 do
   defp get_boundaries({x, y} = edge, values) do
     vertical =
       edge
-      |> Utilities.get_adjacent(:vertical)
+      |> Grid.get_adjacent(:vertical)
       |> Enum.filter(&MapSet.member?(values, &1))
       |> Enum.map(&{"y#{[y, elem(&1, 1)] |> Enum.join(",")}", x})
 
     horizontal =
       edge
-      |> Utilities.get_adjacent(:horizontal)
+      |> Grid.get_adjacent(:horizontal)
       |> Enum.filter(&MapSet.member?(values, &1))
       |> Enum.map(&{"x#{[x, elem(&1, 0)] |> Enum.join(",")}", y})
 

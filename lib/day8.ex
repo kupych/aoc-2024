@@ -4,7 +4,8 @@ defmodule Aoc.Day8 do
   """
   @behaviour Aoc.Day
 
-  alias Aoc.{Day, Utilities}
+  alias Aoc.Day
+  alias Aoc.Utilities.Grid
 
   @impl Day
   def day(), do: 8
@@ -53,7 +54,7 @@ defmodule Aoc.Day8 do
 
   @impl Day
   def parse_input(file) do
-    Utilities.map_from_grid(file)
+    Grid.map_from_grid(file)
   end
 
   defp find_antinodes({node, coords}, grid) do
@@ -76,13 +77,13 @@ defmodule Aoc.Day8 do
   end
 
   defp do_find_antinodes({{ax, ay} = a, {bx, by} = b}, acc, nil) do
-    {dx, dy} = Utilities.distance(a, b)
+    {dx, dy} = Grid.distance(a, b)
 
     [{ax - dx, ay - dy}, {bx + dx, by + dy} | acc]
   end
 
   defp do_find_antinodes({a, b}, acc, {max_x, max_y}) do
-    {dx, dy} = Utilities.distance(a, b)
+    {dx, dy} = Grid.distance(a, b)
 
     points_from_a =
       Stream.unfold(a, fn

@@ -4,7 +4,8 @@ defmodule Aoc.Day10 do
   """
   @behaviour Aoc.Day
 
-  alias Aoc.{Day, Utilities}
+  alias Aoc.Day
+  alias Aoc.Utilities.Grid
 
   @impl Day
   def day(), do: 10
@@ -33,7 +34,7 @@ defmodule Aoc.Day10 do
 
   @impl Day
   def parse_input(file) do
-    Utilities.map_from_grid(file, &String.to_integer/1)
+    Grid.map_from_grid(file, &String.to_integer/1)
   end
 
   def walk_trail([{_, 9} | _] = steps, _, _) do
@@ -42,7 +43,7 @@ defmodule Aoc.Day10 do
 
   def walk_trail([{coords, level} | _] = steps, map) do
     coords
-    |> Utilities.get_adjacent()
+    |> Grid.get_adjacent()
     |> Enum.filter(fn x -> Map.get(map, x) == level + 1 end)
     |> case do
       [] ->

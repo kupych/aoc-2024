@@ -3,7 +3,7 @@ defmodule Aoc.Bingo.Card do
   A struct for the bingo cards in 2021 Day 4.
   """
   alias Aoc.Bingo.Cell
-  alias Aoc.Utilities
+  alias Aoc.Utilities.Grid
   alias __MODULE__
 
   defstruct cells: []
@@ -45,7 +45,7 @@ defmodule Aoc.Bingo.Card do
 
     winning_column =
       markings
-      |> Utilities.transpose()
+      |> Grid.transpose()
       |> Enum.find_index(&Enum.all?(&1))
 
     is_integer(winning_row) or is_integer(winning_column)

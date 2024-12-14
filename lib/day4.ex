@@ -4,7 +4,8 @@ defmodule Aoc.Day4 do
   """
   @behaviour Aoc.Day
 
-  alias Aoc.{Day, Utilities}
+  alias Aoc.Day
+  alias Aoc.Utilities.Grid
 
   @impl Day
   def day(), do: 4
@@ -31,12 +32,12 @@ defmodule Aoc.Day4 do
 
   @impl Day
   def parse_input(file) do
-    Utilities.map_from_grid(file)
+    Grid.map_from_grid(file)
   end
 
   defp find_x_mas(a, %{grid: grid, x_mases: x_mases} = acc) do
     a
-    |> Utilities.get_adjacent(:diagonal_only)
+    |> Grid.get_adjacent(:diagonal_only)
     |> Enum.map(&Map.get(grid, &1))
     |> case do
       ["M", "M", "S", "S"] -> %{acc | x_mases: [a | x_mases]}
@@ -50,8 +51,8 @@ defmodule Aoc.Day4 do
   defp find_xmas(x, %{grid: grid, xmases: xmases} = acc) do
     xmases =
       :diagonal
-      |> Utilities.get_adjacent_directions()
-      |> Enum.map(&[x | Utilities.travel(x, &1, 3)])
+      |> Grid.get_adjacent_directions()
+      |> Enum.map(&[x | Grid.travel(x, &1, 3)])
       |> Enum.reduce([], &do_find_xmas(&1, &2, grid))
       |> Kernel.++(xmases)
 

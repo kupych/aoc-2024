@@ -4,7 +4,8 @@ defmodule Aoc.Day6 do
   """
   @behaviour Aoc.Day
 
-  alias Aoc.{Day, Utilities}
+  alias Aoc.Day
+  alias Aoc.Utilities.Grid
 
   @dirs %{0 => {0, -1}, 1 => {1, 0}, 2 => {0, 1}, 3 => {-1, 0}}
   @obstacle "#"
@@ -38,7 +39,7 @@ defmodule Aoc.Day6 do
 
   @impl Day
   def parse_input(file) do
-    map = Utilities.map_from_grid(file)
+    map = Grid.map_from_grid(file)
 
     start =
       map
@@ -53,7 +54,7 @@ defmodule Aoc.Day6 do
       :loop
     else
       current
-      |> Utilities.move_coords(@dirs[dir])
+      |> Grid.move_coords(@dirs[dir])
       |> then(&Map.get(map, &1))
       |> case do
         @obstacle ->
@@ -62,7 +63,7 @@ defmodule Aoc.Day6 do
         @path ->
           walk(%{
             state
-            | path: [Utilities.move_coords(current, @dirs[dir]) | path],
+            | path: [Grid.move_coords(current, @dirs[dir]) | path],
               visited: MapSet.put(visited, {current, dir})
           })
 
