@@ -34,14 +34,12 @@ defmodule Aoc.Day15 do
     %{map: %{start: start} = map, steps: steps} = start_map(file, true)
     %{"#" => walls, "[" => boxes} = Enum.group_by(map, &elem(&1, 1), &elem(&1, 0))
 
-    %{boxes: boxes, walls: walls, start: start} =
-      Enum.reduce(
-        steps,
-        %{start: start, boxes: MapSet.new(boxes), walls: MapSet.new(walls)},
-        &walk_b/2
-      )
-
-    boxes
+    steps
+    |> Enum.reduce(
+      %{start: start, boxes: MapSet.new(boxes), walls: MapSet.new(walls)},
+      &walk_b/2
+    )
+    |> Map.get(:boxes)
     |> Enum.map(fn {x, y} -> y * 100 + x end)
     |> Enum.sum()
   end
@@ -87,7 +85,7 @@ defmodule Aoc.Day15 do
   end
 
   def walk_b(step, %{start: start, boxes: boxes, walls: walls} = state) do
-    {new_x, new_y} = new_dir = @steps[step]
+    new_dir = @steps[step]
 
     next_boxes = next_boxes(start, new_dir, boxes, walls)
 
@@ -109,12 +107,12 @@ defmodule Aoc.Day15 do
         %{state | start: Grid.move_coords(start, new_dir), boxes: boxes}
 
       true ->
-        new_map = %{state | start: Grid.move_coords(start, new_dir)}
+        %{state | start: Grid.move_coords(start, new_dir)}
     end
   end
 
   def try_move({x, _} = coords, dir, map) when is_integer(x) do
-    {new_x, new_y} = new_coords = Grid.move_coords(coords, dir)
+    new_coords = Grid.move_coords(coords, dir)
 
     case Map.get(map, new_coords) do
       "O" -> {coords, new_coords}
@@ -154,7 +152,7 @@ defmodule Aoc.Day15 do
     end
   end
 
-  def get_next_boxes(coords, {-1, _} = d), do: [Grid.move_coords(coords, {-2, 0})]
+  def get_next_boxes(coords, {-1, _}), do: [Grid.move_coords(coords, {-2, 0})]
   def get_next_boxes(coords, {1, _} = d), do: [Grid.move_coords(coords, d)]
 
   def get_next_boxes(coords, {0, dy} = d) do
@@ -162,6 +160,6 @@ defmodule Aoc.Day15 do
   end
 
   def next_box_location([{lx, ly}, _], {-1, _}), do: [{lx - 1, ly}]
-  def next_box_location([{_, ly}, {rx, ry}], {1, _}), do: [{rx + 1, ry}]
+  def next_box_location([{_, _}, {rx, ry}], {1, _}), do: [{rx + 1, ry}]
   def next_box_location([{lx, y}, {rx, _}], {0, dy}), do: [{lx, y + dy}, {rx, y + dy}]
 end
