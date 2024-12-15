@@ -34,7 +34,7 @@ defmodule Aoc.Day10 do
 
   @impl Day
   def parse_input(file) do
-    Grid.map_from_grid(file, &String.to_integer/1)
+    Grid.map_from_grid(file, func: &String.to_integer/1)
   end
 
   def walk_trail([{_, 9} | _] = steps, _, _) do

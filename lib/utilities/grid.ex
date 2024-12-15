@@ -71,6 +71,7 @@ defmodule Aoc.Utilities.Grid do
     {xs, ys} =
       grid
       |> Map.keys()
+      |> Enum.filter(&is_tuple/1)
       |> Enum.unzip()
 
     {Enum.max(xs), Enum.max(ys)}
@@ -87,20 +88,37 @@ defmodule Aoc.Utilities.Grid do
     {x + dx, y + dy}
   end
 
-  def map_from_grid(string, func \\ false) do
+  @doc """
+  Given a string "map" of a 2d area, will return a map with the co-ordinates
+  as keys and the values as the characters in the map. Certain options can
+  be passed:
+
+  - `:func` - a function to apply to each cell in the map
+  - `:start_char` - adds a "start" key to the map with the starting coordinates
+  """
+  def map_from_grid(string, options \\ []) do
+    func = Keyword.get(options, :func, false)
+    start_char = Keyword.get(options, :start_char, nil)
+
     string
     |> String.split("\n", trim: true)
     |> Enum.map(&(String.split(&1, "", trim: true) |> Enum.with_index()))
     |> Enum.with_index()
     |> Enum.flat_map(fn {row, y} ->
       row
-      |> Enum.map(fn {cell, x} ->
-        {{x, y},
-         if func do
-           apply(func, [cell])
-         else
-           cell
-         end}
+      |> Enum.flat_map(fn {cell, x} ->
+        cell =
+          if func do
+            apply(func, [cell])
+          else
+            cell
+          end
+
+        if cell == start_char do
+          [{:start, {x, y}}, {{x, y}, Keyword.get(options, :empty_char, ".")}]
+        else
+          [{{x, y}, cell}]
+        end
       end)
     end)
     |> Enum.into(%{})
@@ -138,5 +156,21 @@ defmodule Aoc.Utilities.Grid do
     |> rem(max)
     |> Kernel.+(max)
     |> rem(max)
+  end
+
+  def draw(map) do
+    {max_x, max_y} = bounds(map)
+
+    for y <- 0..max_y do
+      for x <- 0..max_x do
+        if Map.get(map, :start) == {x, y} do
+          IO.write("@")
+        else
+          IO.write(map[{x, y}] || ".")
+        end
+      end
+
+      IO.puts("")
+    end
   end
 end
